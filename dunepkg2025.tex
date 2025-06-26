@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage{authblk} % used to generate the list of authors with afiliations
+\usepackage{multicol} % gives control over the number of columns
+\usepackage{lipsum} % generate lipsum test while experimenting with formatting
+\usepackage[margin=1in]{geometry} % use smaller margins than the default
+
+\title{\bf OCaml Package Management with (only!) Dune}
+\date{2025-06-26}
+\author[1]{Stephen Sherratt}
+\affil[1]{Tarides}
+
+\begin{document}
+    \maketitle
+
+    \begin{abstract}
+    \noindent
+    The OCaml build system Dune keeps track of a project's dependencies on
+    external software packages however historically has been unable to download
+    or install these packages, relying on additional tools to perform these
+    functions. This complicated the development of projects in OCaml as users
+    needed to be fluent in both Dune as well as an additional tool (usually
+    Opam) to manage a project's dependencies. Recent work on Dune has added
+    package management capabilities directly to the build system, enabling
+    workflows where Dune is the only tool necessary to develop software in
+    OCaml.
+    \newline
+    \newline
+    \noindent
+    This talk will showcase Dune's new package management features by
+    developing an OCaml program starting from a bare system with no OCaml
+    tooling installed.
+    \end{abstract}
+
+    \begin{multicols}{2}
+
+        \section{Section 1}
+
+        \lipsum[1]
+
+        \section{Section 2}
+
+        \lipsum[1]
+
+        \section{Section 3}
+
+        \lipsum[1]
+
+        \section{Section 3}
+
+        \lipsum[1]
+
+    \end{multicols}
+\end{document}
