@@ -117,7 +117,7 @@ $ dune build
               from. Thus it remains the default repository Dune uses when
               resolving and installing packages.
 
-        \item Dune reuses opam's internal libraries to parse package metadata
+        \item Dune uses opam's internal libraries to parse package metadata
               files and to evaluate dependency formulae.
 
         \item Opam's command-line tool is still the only way to globally install opam
@@ -149,6 +149,18 @@ $ dune build
         dependencies, preventing unexpected API changes from breaking the
         project as new package releases are published.
 
+        \subsection {Solving Dependencies}
+
+        OCaml does not support multiple different versions of the same library
+        being included in a build artifact. Dune must choose at most one version
+        of each package such that a project's dependency constraints are
+        satisfied, which is equivalent to a satisfiability problem. Opam's
+        built-in constraint solver is optimized for making minimal updates to an
+        existing set of installed packages, whereas Dune generates dependency solutions
+        from scratch. Thus rather than using opam's solver we elected to base our solver off
+        \textit{0install}\footnote{\url{https://github.com/0install/0install}}
+        as it's more suitable for Dune's use case.
+
         \subsection {Portable Lock Directories}
 
         Opam packages may have different dependencies depending on properties of
@@ -165,12 +177,11 @@ $ dune build
         dependency problem once for each of a prescribed list of platforms, and
         then merging the results. The list of platforms can be controlled by an
         entry in a config file. We find that in practice the performance cost of
-        this repeated work is acceptable. We may investigate alternative
-        approaches to portable lock directories in the future to
-        generate completely generic solutions, such as the solver algorithm
-        employed in Python's \textit{uv}
-        \footnote{\url{https://github.com/astral-sh/uv/blob/main/docs/reference/resolver-internals.md}}
-        package manager.
+        this repeated work is acceptable, though we may investigate alternative
+        approaches to generating portable lock directories in the future. Of
+        particular note is the Python package manager
+        \textit{uv}\footnote{\url{https://github.com/astral-sh/uv}} which solves a
+        similar problem in the Python package ecosystem.
 
         \section {Installing the Compiler}
 
@@ -217,16 +228,16 @@ $ dune build
         Dune installs tools using the same package management mechanism as for
         regular project dependencies.
 
-        However, unlike opam the build tools are not installed in the same
-        package environment as the project or each other, thus the dependencies
-        of development tools do not have to be compatible with the dependency
+        Developer tools installed by Dune are not installed in the same
+        package environment as the project or as each other, thus the dependencies
+        of developer tools do not have to be compatible with the dependency
         closure of the project itself, nor with the dependency closure of other
-        development tools. This is a major improvement over the previous opam
-        workflow where the dependencies of the development tools sometimes
-        created issues for projects whose own dependencies would conflict with
-        the dependencies of development tools.
+        developer tools. This is a major improvement over the previous opam
+        workflow where all developer tools were installed into the same package
+        environment as the project's dependencies which sometimes created
+        conflicts between the dependencies of the projects and tools.
 
-        Development tools managed by Dune are installed locally within the
+        Developer tools managed by Dune are installed locally within the
         project, similar to installing tools into a local opam switch. This
         allows Dune to ensure that tools will be compatible with the project.
         For example OCaml's LSP server must be compiled with the same OCaml
